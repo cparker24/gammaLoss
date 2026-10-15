@@ -69,9 +69,9 @@ branch:
 
 - `gammaLoss` moved from `<Eloss>` into its own `<Photons>` block after the
   medium; `gammaLoss_on` and `hydro2D` were removed.
-- `only_photons` is gone since photons no longer go through hadronization;
-  configurations that used `only_photons=1` have no `<JetHadronization>`
-  block, so jet partons are not hadronized.
+- `only_photons` was dropped since photons no longer go through
+  hadronization; for photon-only runs simply leave out `<JetHadronization>`
+  (configurations that used `only_photons=1` have no such block).
 - Configurations without `gammaLoss` (pp references and hadron runs) have a
   `<Photons>` block with emission and reabsorption off, so hard and shower
   photons are still labeled 22 and 23.
@@ -82,5 +82,4 @@ branch:
   point to `/scratch/user/cameron.parker/projects/runs`, and the python
   scripts assume the checkout is at
   `/scratch/user/cameron.parker/projects/C-SCAPE-COMP-gamma`.
-- The iSS configurations read `../test/iSS_parameters.dat`, which is not part
-  of C-SCAPE and has to be provided.
+- The iSS configurations use the default `../external_packages/iSS/iSS_parameters.dat`.

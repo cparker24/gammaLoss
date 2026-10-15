@@ -55,6 +55,4 @@
 
   </Eloss>
   
-  <!-- only_photons: no jet hadronization, photons are written by gammaLoss -->
-
 </jetscape>

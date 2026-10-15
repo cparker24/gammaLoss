@@ -132,7 +132,7 @@
 
   <SoftParticlization>
     <iSS>
-      <iSS_input_file>../test/iSS_parameters.dat</iSS_input_file>
+      <iSS_input_file>../external_packages/iSS/iSS_parameters.dat</iSS_input_file>
       <!-- file path for the default table files  -->
       <iSS_table_path>../external_packages/iSS/iSS_tables</iSS_table_path>
       <!-- file path for the default particle table files  -->
@@ -142,8 +142,6 @@
       <Perform_resonance_decays>0</Perform_resonance_decays>
     </iSS>
   </SoftParticlization>
-
-  <!-- only_photons: no jet hadronization, photons are written by gammaLoss -->
 
   <!-- Hadronic Afterburner  -->
   <Afterburner>
