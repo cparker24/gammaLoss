@@ -1,0 +1,5 @@
+file,name,linestyle,color
+alt-rand-seed/analysis,Default, 1, 632
+alt-rand-seed/abs-analysis,Absorption, 2, 634
+no-blending/analysis,Blending Off, 16, 850
+no-blending/abs-analysis,Blending Off w/ Abs, 17, 849

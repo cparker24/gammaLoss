@@ -1,0 +1,11 @@
+file,name,linestyle,color
+default/analysis,Default, 1, 632
+default/abs-analysis,Absorption, 2, 634
+PCE/analysis,#sigma_{#PsiCE}=10 MeV | A=3, 5, 616
+PCE/abs-analysis,#sigma_{#PsiCE}=10 MeV | A=3 w/ Abs, 6, 618
+%PCE-5/analysis,#PsiCE-5, 7, 432
+%PCE-5/abs-analysis,#PsiCE-5 w/ Abs, 8, 434
+PCE-narrow/analysis,#sigma_{#PsiCE}=5 MeV | A=5, 9, 600
+PCE-narrow/abs-analysis,#sigma_{#PsiCE}=5 MeV | A=5 w/ Abs, 10, 602
+PCE-wide-low/analysis,#sigma_{#PsiCE}=20 MeV | A=2.5, 11, 401
+PCE-wide-low/abs-analysis,#sigma_{#PsiCE}=20 MeV | A=2.5 w/ Abs, 12, 403

@@ -1,0 +1,5 @@
+file,name,linestyle,color
+default/analysis,Default, 1, 632
+default/abs-analysis,Absorption, 2, 634
+alt-rand-seed/analysis,Alternate Seed, 13, 401
+alt-rand-seed/abs-analysis,Alternate Seed w/ Abs, 14, 403

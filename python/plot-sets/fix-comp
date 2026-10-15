@@ -1,0 +1,5 @@
+file,name,linestyle,color
+PCE-old/analysis,Default, 1, 632
+PCE-old/abs-analysis,Absorption, 2, 634
+PCE/analysis,Fix, 5, 616
+PCE/abs-analysis,Fix Abs, 6, 618

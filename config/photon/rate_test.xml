@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<jetscape>
+  <nEvents> 10000 </nEvents>
+  <vlevel> 0 </vlevel>
+  <nEvents_printout> 1 </nEvents_printout>
+  <enableAutomaticTaskListDetermination> false </enableAutomaticTaskListDetermination>
+
+  <!-- Photon Modules: run after the medium and energy loss, before jet hadronization -->
+  <Photons>
+    <gammaLoss>
+        <source>2</source>
+        <thermalEmission> 1 </thermalEmission>
+        <hadronGas>1</hadronGas>
+        <hadronToQGP>0.154</hadronToQGP>
+        <pseudoCriticalEnhancement>1</pseudoCriticalEnhancement>
+        <blending>1</blending>
+        <blendingW>0.005</blendingW>
+        <blendingL>0.130</blendingL>
+        <blendingH>0.180</blendingH>
+    </gammaLoss>
+  </Photons>
+
+  <!--Eloss Modules -->
+  <Eloss>
+  </Eloss>
+</jetscape>

@@ -1,0 +1,92 @@
+# makes set of brick systems for comparing photon absoroption
+from multiprocessing import connection
+import os
+from datetime import date
+from functions import *
+import pandas as pd
+from operator import itemgetter
+import xml.etree.ElementTree as ET
+import ROOT
+from functions import parton
+
+# setting directory for analysis
+analysisDir = sys.argv[1]
+directories = getDirs(analysisDir)
+outdir = analysisDir+"analysis/"
+outfile = ROOT.TFile.Open(outdir+'analysis.root', "RECREATE")
+
+# initializing histograms
+#pTs = [1,3,5,7,9]
+pTs = [0.5,1.5]
+lengths = [2,6,10,14,18,22]
+totalhist = ROOT.TH2D('Photon Rate','Photon Rate; Brick Length (fm); pT (GeV); Photons Out (%)',
+                      len(lengths)-1,lengths[0],lengths[len(lengths)-1],
+                      len(pTs)-1,pTs[0],pTs[len(pTs)-1])
+eventHist = ROOT.TH2D('Event Count','Event Count; Brick Length (fm); pT (GeV); Events',
+                      len(lengths)-1,lengths[0],lengths[len(lengths)-1],
+                      len(pTs)-1,pTs[0],pTs[len(pTs)-1])
+
+# directory loop
+for dir in directories:
+    xml = ET.parse(analysisDir+"points/"+dir+"/xml/brick_0.xml")
+    root = xml.getroot()
+
+    # reading length
+    length = 0
+    for temp in root.iter('brick_length'):
+        length = float(temp.text)
+
+    # reading pT
+    thispT = 0
+    for temp in root.iter('pT'):
+        thispT = float(temp.text)
+
+    # reading partons
+    print(f'Reading {dir}')
+    datfile = open(analysisDir+"points/"+dir+"/dat/Brick_Bin0_final_state_hadrons.dat","r")
+    datlines = datfile.readlines()
+    for line in datlines:
+        if 'Event' in line:
+            eventHist.Fill(length, thispT)
+
+        if '#' in line:
+            continue
+
+        part = parton(line)
+        if part.PID == 22 and part.index == 0 and part.status < 0:
+            #print(length,thispT)
+            totalhist.Fill(length,thispT)
+
+    datfile.close()
+    del datfile, datlines
+    print("Finished")
+
+# fits
+totalhist.Scale(100.0)
+totalhist.Divide(eventHist)
+for i in range(len(pTs)-1):
+    name = str(pTs[i])+"to"+str(pTs[i+1])
+    hist = totalhist.ProjectionX(name,i+1,i+1)
+    hist = InvertHist(hist)
+
+    hist.GetYaxis().SetTitle("Photons Out (%)") 
+    hist.Fit("expo")
+    hist.SetLineWidth(3)
+    hist.SetMarkerStyle(21)
+    hist.SetStats(0)
+    rp = ROOT.TRatioPlot(hist)
+    fit = hist.GetFunction("expo")
+
+    # output
+    print("Mean free path: " + str(-1.0/fit.GetParameter(1)) + " +/- " + str(fit.GetParError(1)/pow(fit.GetParameter(1),2)) + " fm")
+    c1 = ROOT.TCanvas("c1","c1",1400,1200)
+    rp.SetConfidenceIntervalColors(ROOT.kWhite, ROOT.kWhite)
+    #rp.Draw()
+    hist.Draw("EX0 P")
+    c1.Print(outdir+name+".png")
+    c1.Close()
+    hist.Write()
+
+# end behavior
+totalhist.Write()
+outfile.Close()

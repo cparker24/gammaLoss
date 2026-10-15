@@ -1,0 +1,14 @@
+SCRIPT DIRECTORY
+
+functions.py: general list of methods that gets used across files
+hydro-slurm.py: makes hydro events with one per directory
+add-hydro-events.py: adds to the hydro event list
+check-blanks.py: checks for directories that didnt output a final state hadrons list
+AMY-NLO-check.py: plots components for the QGP NLO rate to make sure they match the paper
+AMY-rate.py: plots LO QGP rate to compare to plot in the paper
+dRd3p-rate-plot.py: shows the QGP and hadronic rates as well as the transition between them as temperature changes
+R_e-rate-plot.py: same but for total emission rate considered
+run-brick.py: runs jetscape_user_gamma_abs_test.xml for a variety of flows. Config files in designs directory
+1D-analysis.py: photons out as a function of some parameter
+brick-analysis.py: exponential fit to several different brick legnths to derive mean free path
+AMY-rate.py: recreates AMY p dR/dp plot and compares NLO variant to monte carlo yields

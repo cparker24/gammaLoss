@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+
+<jetscape>
+
+  <nEvents> 100 </nEvents>
+  <setReuseHydro> true </setReuseHydro>
+  <nReuseHydro> 100 </nReuseHydro>
+
+  <JetScapeWriterAscii> on </JetScapeWriterAscii>
+  <JetScapeWriterFinalStateHadronsAscii> on </JetScapeWriterFinalStateHadronsAscii>
+  <JetScapeWriterFinalStatePartonsAscii> on </JetScapeWriterFinalStatePartonsAscii>
+  <outputFilename>test_out</outputFilename>
+  <vlevel> 0 </vlevel>
+  <nEvents_printout> 1 </nEvents_printout>
+  <enableAutomaticTaskListDetermination> true </enableAutomaticTaskListDetermination>
+
+  <Random>
+    <seed>0</seed>
+  </Random>
+  <!-- Inital State Module  -->
+
+  <!-- Hard Process -->
+  <Hard>
+    <PhotonGun>
+      <name>PhotonGun</name>
+      <min_pT>0.5</min_pT>
+      <max_pT>20.0</max_pT>
+      <Ecm>2760</Ecm>
+      <eta_max>2.0</eta_max>
+    </PhotonGun>
+  </Hard>
+
+  <!-- Hydro  Module  -->
+  <Hydro>
+    <hydro_from_file>
+      <name>Hydro from file </name>
+      <read_in_multiple_hydro>1</read_in_multiple_hydro>
+      <!-- hydro_files_folder  /wsu/home/groups/maj-shen/JETSCAPEDataFile/HydroProfiles/5020GeV_0-10 hydro_files_folder -->
+      <hydro_files_folder>../examples/test_hydro_files</hydro_files_folder>
+    </hydro_from_file>
+  </Hydro>
+  <!-- Photon Modules: run after the medium and energy loss, before jet hadronization -->
+  <Photons>
+    <gammaLoss>
+        <source>2</source>
+        <thermalEmission> 1 </thermalEmission>
+        <hadronGas>1</hadronGas>
+        <pseudoCriticalEnhancement>0</pseudoCriticalEnhancement>
+        <reabsorption>1</reabsorption>
+        <vacToHadron>0.1071</vacToHadron>
+        <absFactor>1.0</absFactor>
+        <emissionFactor>1.0</emissionFactor>
+        <tStartOffset>0.01</tStartOffset>
+        <emissionEveryEvent>1</emissionEveryEvent>
+        <resample>1</resample>
+        <grid_length>50</grid_length>
+    </gammaLoss>
+  </Photons>
+
+  <!--Eloss Modules -->
+  <Eloss>
+
+    <deltaT>0.1</deltaT>
+    <formTime> -0.1</formTime>
+    <maxT>150</maxT>
+    <tStart> 0.6 </tStart> <!-- Start time of jet quenching, proper time, fm/c   -->
+    <mutex>ON</mutex>
+
+  </Eloss>
+
+  <!-- only_photons: no jet hadronization, photons are written by gammaLoss -->
+
+</jetscape>

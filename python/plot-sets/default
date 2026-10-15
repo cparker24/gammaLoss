@@ -1,0 +1,7 @@
+file,name,linestyle,color
+default/analysis,Default, 1, 632
+default/abs-analysis,Absorption, 2, 634
+thermal-K/analysis,K_{therm}=1.5, 3, 416
+thermal-K/abs-analysis,K_{therm}=1.5 w/ Abs, 4, 419
+PCE/analysis,#sigma_{#PsiCE}=10 MeV | A=3, 5, 616
+PCE/abs-analysis,#sigma_{#PsiCE}=10 MeV | A=3 w/ Abs, 6, 618

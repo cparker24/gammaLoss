@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<jetscape>
+  <nEvents> 10 </nEvents>
+  <vlevel> 0 </vlevel>
+  <nEvents_printout> 1 </nEvents_printout>
+
+  <outputFilename>/scratch/user/cameron.parker/projects/runs/brick/Brick-emission/boost_test_out</outputFilename>
+  <JetScapeWriterFinalStateHadronsAscii> on </JetScapeWriterFinalStateHadronsAscii>
+
+  <!-- Hard Process -->
+  <Hard>
+    <!-- Parton Gun test with fixed pT and fixed IS pos = 0  -->
+    <PGun>
+      <name>PGun</name>
+      <pT>1</pT>
+      <parID>1</parID>
+    </PGun>
+  </Hard>
+
+  <!-- Hydro  Module  -->
+  <Hydro>
+
+    <!-- Test Brick if bjorken_expansion_on="true", T(t) = T * (start_time[fm]/t)^{1/3} -->
+    <Brick bjorken_expansion_on="false" start_time="0.6">
+      <name>Brick</name>
+      <T>0.2</T>
+      <v_x>0.3</v_x>
+      <v_y>0.3</v_y>
+      <v_z>-0.3</v_z>
+    </Brick>
+  </Hydro>
+  <!-- Photon Modules: run after the medium and energy loss, before jet hadronization -->
+  <Photons>
+    <gammaLoss>
+        <source>2</source>
+        <thermalEmission> 1 </thermalEmission>
+        <hadronGas>0</hadronGas>
+        <pseudoCriticalEnhancement>0</pseudoCriticalEnhancement>
+        <reabsorption>0</reabsorption>
+        <blending>0</blending>
+        <emissionFactor>10000.0</emissionFactor>
+    </gammaLoss>
+  </Photons>
+
+  <!--Eloss Modules -->
+  <Eloss>
+    <tStart> 0.6 </tStart> <!-- Start time of jet quenching, proper time, fm/c   -->
+
+    <maxT>100</maxT>    
+    
+    <Matter>
+        <in_vac> 0 </in_vac>
+        <brick_med> 1 </brick_med>   <!-- Set brick_med to 1 while using Brick Hydro module-->
+        <brick_length> 5.0 </brick_length>
+        <hydro_Tc> 0.16 </hydro_Tc>
+    </Matter>
+
+  </Eloss>
+  
+  <!-- only_photons: no jet hadronization, photons are written by gammaLoss -->
+
+</jetscape>

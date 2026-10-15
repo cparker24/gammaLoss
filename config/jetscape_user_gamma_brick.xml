@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<!-- Prompt and thermal photons with reabsorption in a static brick (requires USE_ROOT with MathMore) -->
+<jetscape>
+
+  <nEvents> 10 </nEvents>
+
+  <JetScapeWriterFinalStateHadronsAscii> on </JetScapeWriterFinalStateHadronsAscii>
+  <outputFilename>test_out_gamma_brick</outputFilename>
+  <vlevel> 0 </vlevel>
+  <nEvents_printout> 1 </nEvents_printout>
+
+  <Random>
+    <seed>0</seed>
+  </Random>
+
+  <!-- Hard Process: prompt photons from the pQCD parameterization -->
+  <Hard>
+    <PhotonGun>
+      <min_pT>1.0</min_pT>
+      <max_pT>5.0</max_pT>
+      <Ecm>200</Ecm>
+      <eta_max>0.5</eta_max>
+    </PhotonGun>
+  </Hard>
+
+  <!-- Hydro Module: brick at T = 0.15 GeV, in the QGP/hadron gas blending region -->
+  <Hydro>
+    <Brick bjorken_expansion_on="false" start_time="0.6">
+      <name>Brick</name>
+      <T>0.15</T>
+    </Brick>
+  </Hydro>
+
+  <!-- Photon Modules: run after the medium and energy loss, before jet hadronization -->
+  <Photons>
+    <gammaLoss>
+      <hadronGas>1</hadronGas>
+      <hadronGasTablePath>../external_packages/gammaLoss/tables</hadronGasTablePath>
+      <!-- emission grid only needs to cover the brick -->
+      <grid_length>6</grid_length>
+      <reabsorption>1</reabsorption>
+      <jetPhotonReabsorption>1</jetPhotonReabsorption>
+    </gammaLoss>
+  </Photons>
+
+  <!--Eloss Modules: the brick length is set here and used by Brick and gammaLoss -->
+  <Eloss>
+    <Matter>
+      <in_vac> 0 </in_vac>
+      <brick_med> 1 </brick_med>
+      <brick_length> 3.0 </brick_length>
+    </Matter>
+  </Eloss>
+
+</jetscape>
