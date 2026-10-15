@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
 
 <!-- Absorption of hard and shower photons in a Trento + MUSIC medium, with Pythia
-     prompt photon events and MATTER energy loss (requires USE_ROOT with MathMore and USE_MUSIC).
+     QCD jets and prompt photons and MATTER energy loss (requires USE_ROOT with MathMore and USE_MUSIC).
      Absorbed photons are written with negative status: -22 hard, -23 shower. -->
 <jetscape>
 
-  <nEvents> 100 </nEvents>
+  <!-- shower photons are rare (about 1 in 200 events), so many events share one hydro -->
+  <nEvents> 2000 </nEvents>
   <setReuseHydro> true </setReuseHydro>
-  <nReuseHydro> 100 </nReuseHydro>
+  <nReuseHydro> 2000 </nReuseHydro>
 
   <JetScapeWriterFinalStateHadronsAscii> on </JetScapeWriterFinalStateHadronsAscii>
   <outputFilename>test_out_gamma_jet_absorption</outputFilename>
@@ -49,15 +50,15 @@
     </Trento>
   </IS>
 
-  <!-- Hard Process: Pythia prompt photon processes only (qg -> q gamma, qqbar -> g gamma, ...),
-       giving a hard photon (status 22) and a recoiling parton that showers in MATTER -->
+  <!-- Hard Process: Pythia QCD jets, whose quarks radiate shower photons in MATTER (status 23),
+       and prompt photon processes (qg -> q gamma, ...) for hard photons (status 22) -->
   <Hard>
     <PythiaGun>
-      <pTHatMin>2</pTHatMin>
-      <pTHatMax>20</pTHatMax>
+      <pTHatMin>20</pTHatMin>
+      <pTHatMax>50</pTHatMax>
       <eCM>2760</eCM>
       <LinesToRead>
-        HardQCD:all = off
+        HardQCD:all = on
         PromptPhoton:all = on
       </LinesToRead>
     </PythiaGun>
@@ -93,7 +94,7 @@
         <writeAbsorbed>1</writeAbsorbed>
         <!-- artificial enhancement of the absorption rate (default 1) so that
              absorbed photons show up in a short run -->
-        <absFactor>10.0</absFactor>
+        <absFactor>30.0</absFactor>
     </gammaLoss>
   </Photons>
 
