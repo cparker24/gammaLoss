@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<!-- Thermal and prompt photons with reabsorption in a Trento + MUSIC medium (requires USE_ROOT with MathMore and USE_MUSIC) -->
+<!-- Thermal and prompt photons with reabsorption in a Trento + MUSIC medium with iSS freeze-out (requires USE_ROOT with MathMore, USE_MUSIC and USE_ISS) -->
 <jetscape>
 
   <nEvents> 10 </nEvents>
@@ -74,6 +74,14 @@
           <output_evolution_to_memory>1</output_evolution_to_memory>
       </MUSIC>
   </Hydro>
+
+  <!-- Soft Particlization: hadrons from the freeze-out surface -->
+  <SoftParticlization>
+    <iSS>
+      <number_of_repeated_sampling>1</number_of_repeated_sampling>
+      <Perform_resonance_decays>1</Perform_resonance_decays>
+    </iSS>
+  </SoftParticlization>
 
   <!-- Photon Modules: run after the medium evolution -->
   <Photons>

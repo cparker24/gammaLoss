@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+
+<!-- Absorption of hard and shower photons in a Trento + MUSIC medium, with Pythia
+     prompt photon events and MATTER energy loss (requires USE_ROOT with MathMore and USE_MUSIC).
+     Absorbed photons are written with negative status: -22 hard, -23 shower. -->
+<jetscape>
+
+  <nEvents> 100 </nEvents>
+  <setReuseHydro> true </setReuseHydro>
+  <nReuseHydro> 100 </nReuseHydro>
+
+  <JetScapeWriterFinalStateHadronsAscii> on </JetScapeWriterFinalStateHadronsAscii>
+  <outputFilename>test_out_gamma_jet_absorption</outputFilename>
+  <vlevel> 0 </vlevel>
+  <nEvents_printout> 1 </nEvents_printout>
+
+  <Random>
+    <seed>0</seed>
+  </Random>
+
+  <!-- Inital State Module  -->
+  <IS>
+    <grid_max_x> 15 </grid_max_x>
+    <grid_max_y> 15 </grid_max_y>
+    <grid_max_z> 0 </grid_max_z>
+    <grid_step_x> 0.2 </grid_step_x>
+    <grid_step_y> 0.2 </grid_step_y>
+    <Trento>
+    <PhysicsInputs  projectile='Pb'
+            target='Pb'
+            sqrts='2760'
+            cross-section='6.7'
+            normalization='16.0'>
+    </PhysicsInputs>
+    <CutInputs  centrality-low='0'
+          centrality-high='10'>
+    </CutInputs>
+    <TransInputs  reduced-thickness='0.0'
+            fluctuation="1.2"
+            nucleon-width="0.9"
+            nucleon-min-dist="1.2">
+    </TransInputs>
+    <LongiInputs  mean-coeff="1.0"
+            std-coeff="3.0"
+            skew-coeff="0.0"
+            skew-type="1"
+            jacobian="0.8">
+    </LongiInputs>
+    </Trento>
+  </IS>
+
+  <!-- Hard Process: Pythia prompt photon processes only (qg -> q gamma, qqbar -> g gamma, ...),
+       giving a hard photon (status 22) and a recoiling parton that showers in MATTER -->
+  <Hard>
+    <PythiaGun>
+      <pTHatMin>2</pTHatMin>
+      <pTHatMax>20</pTHatMax>
+      <eCM>2760</eCM>
+      <LinesToRead>
+        HardQCD:all = off
+        PromptPhoton:all = on
+      </LinesToRead>
+    </PythiaGun>
+  </Hard>
+
+  <!--Preequilibrium Dynamics Module -->
+  <Preequilibrium>
+    <NullPreDynamics> </NullPreDynamics>
+  </Preequilibrium>
+
+  <!-- Hydro  Module  -->
+  <Hydro>
+      <MUSIC>
+          <beastMode>1</beastMode>
+          <InitialProfile>42</InitialProfile>
+          <Initial_time_tau_0>0.6</Initial_time_tau_0>
+          <freezeout_temperature>0.154</freezeout_temperature>
+          <shear_viscosity_eta_over_s>0.10</shear_viscosity_eta_over_s>
+          <output_evolution_to_memory>1</output_evolution_to_memory>
+      </MUSIC>
+  </Hydro>
+
+  <!-- Photon Modules: hard and shower photons are propagated through the medium
+       and written to the final state, absorbed ones with negative status -->
+  <Photons>
+    <gammaLoss>
+        <source>2</source>
+        <thermalEmission>0</thermalEmission>
+        <hadronGas>1</hadronGas>
+        <hadronGasTablePath>../external_packages/gammaLoss/tables</hadronGasTablePath>
+        <reabsorption>1</reabsorption>
+        <jetPhotonReabsorption>1</jetPhotonReabsorption>
+        <writeAbsorbed>1</writeAbsorbed>
+        <!-- artificial enhancement of the absorption rate (default 1) so that
+             absorbed photons show up in a short run -->
+        <absFactor>10.0</absFactor>
+    </gammaLoss>
+  </Photons>
+
+  <!--Eloss Modules: MATTER radiates shower photons (status 23) in the medium -->
+  <Eloss>
+    <deltaT>0.1</deltaT>
+    <formTime> -0.1</formTime>
+    <maxT>20</maxT>
+    <tStart> 0.6 </tStart>
+
+    <Matter>
+      <name>Matter</name>
+      <matter_on> 1 </matter_on>
+      <Q0> 2.0 </Q0>
+      <in_vac> 0 </in_vac>
+      <recoil_on> 1 </recoil_on>
+      <hydro_Tc> 0.154 </hydro_Tc>
+      <QhatParametrizationType> 5  </QhatParametrizationType>
+      <qhat0> -2.0 </qhat0>
+      <alphas> 0.3 </alphas>
+      <qhatA> 10.0 </qhatA>
+      <qhatB> 100.0 </qhatB>
+    </Matter>
+  </Eloss>
+
+  <!-- Jet Hadronization Module: jet partons are hadronized, photons are written by gammaLoss -->
+  <JetHadronization>
+    <name>colorless</name>
+    <take_recoil>1</take_recoil>
+    <eCMforHadronization>2760</eCMforHadronization>
+  </JetHadronization>
+
+</jetscape>

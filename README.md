@@ -20,9 +20,12 @@ C-SCAPE with ROOT (MathMore is required for the photon modules):
 
 ```bash
 cd build
-cmake .. -DUSE_ROOT=ON -DUSE_MUSIC=ON -DUSE_ISS=ON -DUSE_SMASH=ON
+cmake .. -DUSE_ROOT=ON -DUSE_MUSIC=ON -DUSE_ISS=ON
 make -j
 ```
+
+The MUSIC examples need MUSIC and iSS (`get_music.sh`, `get_iSS.sh`); the
+`config/photon` runs with an afterburner also need SMASH (`-DUSE_SMASH=ON`).
 
 With the repository present, the analysis programs in `analysis/` are built
 as well.
@@ -32,7 +35,7 @@ as well.
 | directory | contents |
 |-----------|----------|
 | `tables/` | Rapp HRG photon rate and pion/kaon chemical potential tables used by the hadron gas rate (`<hadronGasTablePath>`, default `../external_packages/gammaLoss/tables`) |
-| `config/` | example user XMLs with prompt photons from the PhotonGun as the only hard process: `jetscape_user_gamma_brick.xml` (static brick) and `jetscape_user_gamma_MUSIC.xml` (Trento + MUSIC) |
+| `config/` | example user XMLs: `jetscape_user_gamma_brick.xml` (PhotonGun in a static brick), `jetscape_user_gamma_MUSIC.xml` (PhotonGun and thermal photons in Trento + MUSIC with iSS freeze-out) and `jetscape_user_gamma_jet_absorption.xml` (Pythia prompt photon events with MATTER energy loss in Trento + MUSIC, showing absorption of hard and shower photons) |
 | `config/photon/` | run configurations for AuAu 200 GeV and PbPb 2.76 TeV (0-20%, 20-40%), pp references, brick and rate tests, and the MUSIC input file |
 | `analysis/` | C++ analysis of the final state output: `AuAu200GammaAnalysis`, `PbPb2760GammaAnalysis`, `PP200GammaAnalysis`, `PP2760GammaAnalysis` |
 | `data/` | experimental photon and hadron spectra and v2 (PHENIX, STAR, ALICE) used by the analysis |
