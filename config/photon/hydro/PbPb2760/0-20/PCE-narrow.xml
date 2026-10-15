@@ -122,17 +122,6 @@
     </gammaLoss>
   </Photons>
 
-  <!--Eloss Modules -->
-  <Eloss>
-
-    <deltaT>0.1</deltaT>
-    <formTime> -0.1</formTime>
-    <maxT>150</maxT>
-    <tStart> 0.6 </tStart> <!-- Start time of jet quenching, proper time, fm/c   -->
-    <mutex>ON</mutex>
-
-  </Eloss>
-
   <SoftParticlization>
     <iSS>
       <iSS_input_file>../external_packages/iSS/iSS_parameters.dat</iSS_input_file>

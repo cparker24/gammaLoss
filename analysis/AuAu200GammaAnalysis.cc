@@ -76,9 +76,13 @@ int main(int argc, char** argv)
 
     JetScapeXML::Instance()->OpenXMLMainFile(mainXMLName);
     JetScapeXML::Instance()->OpenXMLUserFile(userXMLName.c_str());
-    double emissionRate = JetScapeXML::Instance()->GetElementDouble({"Eloss", "gammaLoss", "emissionFactor"});
+    double emissionRate = JetScapeXML::Instance()->GetElementDouble({"Photons", "gammaLoss", "emissionFactor"});
+    // resampled photons per event: thermal (gammaLoss) and prompt (PhotonGun)
+    double thermalResample = JetScapeXML::Instance()->GetElementDouble({"Photons", "gammaLoss", "resample"});
+    double hardResample = JetScapeXML::Instance()->GetElementDouble({"Hard", "PhotonGun", "resample"});
 
     cout << "Emission Rate: " << emissionRate << endl;
+    cout << "Thermal resample: " << thermalResample << ", prompt resample: " << hardResample << endl;
 
     bool central = true;
     if (analysisDir.find("20-40") != std::string::npos) 
@@ -93,7 +97,10 @@ int main(int argc, char** argv)
     TFile* hadv2File = TFile::Open("../external_packages/gammaLoss/data/AuAu200hadronv2.root");
     TFile* specFileSTAR = TFile::Open("../external_packages/gammaLoss/data/AuAu200photonsSTAR.root");
     TFile* specFile = TFile::Open("../external_packages/gammaLoss/data/AuAu200PhotonSpectrum.root");
-    TFile* ppPhotonBaseline = TFile::Open("/scratch/user/cameron.parker/projects/runs/pp/pp200/photon_spectrum.root");
+    // pp baseline from the analysis directory if present, otherwise the default run
+    std::string ppBaselineFile = analysisDir + "/pp_photon_spectrum.root";
+    if(!std::ifstream(ppBaselineFile)) ppBaselineFile = "/scratch/user/cameron.parker/projects/runs/pp/pp200/photon_spectrum.root";
+    TFile* ppPhotonBaseline = TFile::Open(ppBaselineFile.c_str());
 
     // Retrieve graphs from files.
     TGraphAsymmErrors* photonDatav2;
@@ -198,9 +205,9 @@ int main(int argc, char** argv)
     double etaCut = 0.5;
     double hadEtaCut = 0.35;
     double hardBase = 1.0/41.9734;
-    double hardFactor = 3.*0.115526/41.9734; //prompt photon over inelastic xsec
+    double hardFactor = 3.*0.115526/41.9734/hardResample; //prompt photon over inelastic xsec
     double issFactor = 1.0/JetScapeXML::Instance()->GetElementDouble({"SoftParticlization", "iSS", "number_of_repeated_sampling"});
-    double thermalFactor = 1.0/emissionRate;
+    double thermalFactor = 1.0/(emissionRate*thermalResample);
     double jetFactor = 1./100.;
     
     // Ncoll calculations

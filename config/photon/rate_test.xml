@@ -20,7 +20,4 @@
     </gammaLoss>
   </Photons>
 
-  <!--Eloss Modules -->
-  <Eloss>
-  </Eloss>
 </jetscape>
