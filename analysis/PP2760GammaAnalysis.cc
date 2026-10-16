@@ -286,18 +286,11 @@ int main(int argc, char** argv){
     auto photonSigmaGraph = new TGraphErrors(photonSigma);
     photonSigmaGraph->SetTitle("X-SCAPE");
 
-    photonSigma->Scale(5.0);
-    photonSigma->SetLineColor(kBlue+3);
-    photonSigma->SetMarkerColor(kBlue+3);
-    photonSigma->SetFillColorAlpha(kBlue+3, 0.35);
-    auto kfactorgraph = new TGraphErrors(photonSigma);
-    kfactorgraph->SetTitle("K factor = 5");
 
     auto mg2 = new TMultiGraph;
     mg2->SetTitle("p-p Direct Photon Yields;p_{T} [GeV]; E d^{3}#sigma/dp^{3} [pb/GeV^{2}]");
     mg2->Add(expSigmaGraph);
     mg2->Add(photonSigmaGraph,"l3");
-    mg2->Add(kfactorgraph,"l3");
     mg2->Add(limits);
     mg2->SetMinimum(1e1);
     mg2->Draw("AP");
@@ -306,7 +299,6 @@ int main(int argc, char** argv){
     auto legend = new TLegend();
     legend->AddEntry(expSigmaGraph);
     legend->AddEntry(photonSigmaGraph, "", "lf");
-    legend->AddEntry(kfactorgraph, "", "lf");
     legend->AddEntry(fa1);
     legend->Draw();
 

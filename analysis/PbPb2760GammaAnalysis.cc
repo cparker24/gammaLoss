@@ -200,7 +200,7 @@ int main(int argc, char** argv)
     
     int eventCount = 0;
     double etaCut = 0.8;
-    double hardFactor = 5.*0.0735818/61.7678/hardResample;
+    double hardFactor = 0.0735818/61.7678/hardResample; //prompt photon over inelastic xsec, per PhotonGun photon
     double issFactor = 1.0/JetScapeXML::Instance()->GetElementDouble({"SoftParticlization", "iSS", "number_of_repeated_sampling"});
     double thermalFactor = 1.0/(emissionRate*thermalResample);
     double jetFactor = 1./100.;
@@ -525,7 +525,10 @@ int main(int argc, char** argv)
         TCanvas* specCanvas = new TCanvas("specCanvas", "Photon Spec", 800, 600);
         specCanvas->SetLogy();
         vector<TGraphAsymmErrors*> photonGraphs = {};
-        TGraphAsymmErrors* ppBase = new TGraphAsymmErrors((TH1D*)ppFile->Get("photonPt"));
+        // pp baseline per inelastic collision: dsigma/dpT [pb] / sigma_inel
+        TH1D* ppSigma = (TH1D*)ppFile->Get("xsec");
+        ppSigma->Scale(1.0/(61.7678*1.0e9));
+        TGraphAsymmErrors* ppBase = new TGraphAsymmErrors(ppSigma);
         ppBase->SetTitle("p-p baseline scaled");
         ppBase->SetLineColor(kGreen-2);
         ppBase->SetFillColorAlpha(kGreen-2,0.35);

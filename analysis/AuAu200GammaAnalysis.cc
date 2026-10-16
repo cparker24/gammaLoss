@@ -22,6 +22,7 @@
 #include <memory>
 #include <cstdlib>  // for exit()
 #include "TFile.h"
+#include "TKey.h"
 #include "TH1D.h"
 #include "TH2D.h"
 #include "TCanvas.h"
@@ -129,7 +130,16 @@ int main(int argc, char** argv)
     photonDatav2->SetPointError(3,0.25,0.25,0.2,0.2);
     pionGraph->RemovePoint(15); pionGraph->RemovePoint(15); //deleting random duplicates
 
-    TGraphAsymmErrors* ppbase = new TGraphAsymmErrors((TH1D*)ppPhotonBaseline->Get("dNdpt"));
+    // pp baseline per inelastic collision: dsigma/dpT [pb] / sigma_inel
+    // (the "/" in the key name is read as a path by Get, so look up the key)
+    TKey* ppSigmaKey = ppPhotonBaseline ? ppPhotonBaseline->GetKey("dsigma/dpt") : nullptr;
+    if(!ppSigmaKey){
+        std::cerr << "Error: no dsigma/dpt in pp baseline " << ppBaselineFile << std::endl;
+        return 1;
+    }
+    TH1D* ppSigma = (TH1D*)ppSigmaKey->ReadObj();
+    ppSigma->Scale(1.0/(41.9734*1.0e9));
+    TGraphAsymmErrors* ppbase = new TGraphAsymmErrors(ppSigma);
     ppbase->SetTitle("N_{coll} scaled pp baseline");
     ppbase->SetLineColor(kGreen-2);
     ppbase->SetFillColorAlpha(kGreen-2,0.35);
@@ -205,7 +215,7 @@ int main(int argc, char** argv)
     double etaCut = 0.5;
     double hadEtaCut = 0.35;
     double hardBase = 1.0/41.9734;
-    double hardFactor = 3.*0.115526/41.9734/hardResample; //prompt photon over inelastic xsec
+    double hardFactor = hardBase*0.115526/hardResample; //prompt photon over inelastic xsec, per PhotonGun photon
     double issFactor = 1.0/JetScapeXML::Instance()->GetElementDouble({"SoftParticlization", "iSS", "number_of_repeated_sampling"});
     double thermalFactor = 1.0/(emissionRate*thermalResample);
     double jetFactor = 1./100.;
@@ -232,7 +242,7 @@ int main(int argc, char** argv)
         jetFactor = 1.0/fileEvents;
 
         double sigmaGen = reader->GetSigmaGen();
-        //hardFactor = hardBase*sigmaGen;
+        if(sigmaGen > 0) hardFactor = hardBase*sigmaGen/hardResample;
         cout << "SigmaGen: " << sigmaGen << endl;
         cout << "Hard factor: " << hardFactor << endl;
         
@@ -449,6 +459,7 @@ int main(int argc, char** argv)
         hadSpecHist->SetLineColor(kBlue);
         hadSpecHist->SetLineWidth(3);
         TGraphAsymmErrors* hadSpecGraph = new TGraphAsymmErrors(hadSpecHist);
+        hadSpecGraph->SetTitle("X-SCAPE");
         hadSpecHist->Write("hadrons");
         
         // Draw hadron spectrum.
@@ -457,12 +468,14 @@ int main(int argc, char** argv)
         
         TGraphAsymmErrors* flowHads = MakevnGraph(otherhist, "Hadron v2");
         flowHads->Write();
-        flowHads->SetTitle("STAR Data; p_{T} [GeV]; v_{2}");
+        flowHads->SetTitle("X-SCAPE; p_{T} [GeV]; v_{2}");
+        hadDatav2->SetTitle("STAR Data; p_{T} [GeV]; v_{2}");
         myRatioPlot(hadDatav2, flowHads, "Charged Hadron v2");
         
         // Photon v2 then spectrum
         TGraphAsymmErrors* flowPhotons = MakevnGraph(totalhist, "Photon v2");
         flowPhotons->Write();
+        flowPhotons->SetTitle("X-SCAPE");
         myRatioPlot(photonDatav2, flowPhotons, "Photon v2");
 
         //Extended photon v2
