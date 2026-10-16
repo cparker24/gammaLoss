@@ -83,10 +83,6 @@ int main(int argc, char** argv)
     cout << "Emission Rate: " << emissionRate << endl;
     cout << "Reabsorption: " << absorption << endl;
 
-    // moving to output dir
-    chdir(outDir.c_str());
-    std::filesystem::create_directory("fits");
-    
     // Initialize Pythia8 instance (internal organization version).
     Pythia8::Pythia pythia;
     
@@ -99,6 +95,10 @@ int main(int argc, char** argv)
     std::string ppBaselineFile = analysisDir + "/pp_photon_spectrum.root";
     if(!std::ifstream(ppBaselineFile)) ppBaselineFile = "/scratch/user/cameron.parker/projects/runs/pp/pp2760baseline/photon_spectrum.root";
     TFile* ppFile = TFile::Open(ppBaselineFile.c_str());
+
+    // moving to output dir (after opening the inputs, whose paths are relative)
+    chdir(outDir.c_str());
+    std::filesystem::create_directory("fits");
     
     // Retrieve graphs from files.
     bool central = true;
