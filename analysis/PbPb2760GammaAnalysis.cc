@@ -437,7 +437,8 @@ int main(int argc, char** argv)
         
         TPaveText *pthad = new TPaveText(.15, .1, .4, .3, "NDC");
         pthad->AddText("Pb-Pb 2.76 TeV");
-        pthad->AddText("Centrality 20-40%");
+        if(central) pthad->AddText("Centrality 0-20%");
+        else pthad->AddText("Centrality 20-40%");
         pthad->AddText("-0.8 < #eta < 0.8");
         pthad->SetFillColor(kWhite);
 
